@@ -1,0 +1,30 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Runtime and build artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+build/
+dist/
+*.log
+
+# Large binary and deployment artifacts
+docker-image/
+libs/
+*.tar
+*.tar.gz
+*.tgz
+*.whl
+*.jar
+*.pt
+*.onnx
+*.engine
+*.tiff
+app-init/jars/*.jar
+plugins/record/lib/linux/*/ffmpeg
+ssl/bin/mkcert-*

@@ -1,0 +1,38 @@
+# 气体检测传感器插件配置 (双传感器配置，上报通过 sensor_id 与 channel_code 显式区分)
+plugin_type: "GasPlugin"
+enabled: true
+
+params:
+  sensors:
+    # 传感器 1：六合一气体检测模组 (复合检测 CO, H2S, O2, EX, CO2, NOX)
+    - sensor_id: 1
+      name: "6合一气体检测模组"
+      port: "/dev/sensors/gas_sensor_2"          # RS485/TTL 串口连接路径
+      baudrate: 9600
+      data_bits: 8
+      stop_bits: 1
+      parity: "N"
+      short_addr: 0x4274            # 短地址 0x4274
+      timeout: 2.0
+      channel_count: 6
+      channels:
+        - { channel_code: 1, name: "EX",  unit: "PPM",  magnification: 1 }
+        - { channel_code: 2, name: "CO",  unit: "PPM",  magnification: 1 }
+        - { channel_code: 3, name: "H2S", unit: "%VOL", magnification: 2 }
+        - { channel_code: 4, name: "O2",  unit: "%LEL", magnification: 2 }
+        - { channel_code: 5, name: "CO2", unit: "PPM",  magnification: 0 }
+        - { channel_code: 6, name: "NOX", unit: "PPM",  magnification: 2 }
+
+    # 传感器 2：一合一气体检测传感器
+    - sensor_id: 2
+      name: "1合一气体传感器"
+      port: "/dev/sensors/gas_sensor_1"          # 独立串口或共享总线
+      baudrate: 9600
+      data_bits: 8
+      stop_bits: 1
+      parity: "N"
+      short_addr: 0x0962            # 短地址 0x0962
+      timeout: 2.0
+      channel_count: 1
+      channels:
+        - { channel_code: 1, name: "SF6", unit: "PPM",  magnification: 0 }

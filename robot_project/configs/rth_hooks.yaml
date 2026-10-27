@@ -1,0 +1,43 @@
+# 1. 绝对前置安全清洗 (Pre-RTH Resets)
+pre_rth_resets:
+  - plugin_type: "ArmPlugin"
+    action: "goback"
+    params: {}
+
+# 2. 边动作挂载 (Edge Actions)
+edge_actions:
+  "15_14":
+    - plugin_type: "DoorPlugin"
+      action: "open"
+      params: {"ips": ["192.168.1.100"]}
+    - plugin_type: "DoorPlugin"
+      action: "pause"
+      params: {"duration": 3.0}
+    - plugin_type: "NavPlugin"
+      action: "start_nav"
+      params: {"goal_point": 14}
+    - plugin_type: "DoorPlugin"
+      action: "close"
+      params: {"ips": ["192.168.1.100"]}
+
+  "31_21":
+    - plugin_type: "ElevatorPlugin"
+      action: "goToFloor"
+      params: {"addr": 1, "floor": 2}
+    - plugin_type: "NavPlugin"
+      action: "start_nav"
+      params: {"goal_point": 2}
+      
+  "2_1":
+    - plugin_type: "DoorPlugin"
+      action: "open"
+      params: {"ips": ["127.0.0.1"]}
+    - plugin_type: "DoorPlugin"
+      action: "pause"
+      params: {"ips": ["127.0.0.1"]}
+    - plugin_type: "NavPlugin"
+      action: "start_nav"
+      params: {"goal_point": 1}
+    - plugin_type: "DoorPlugin"
+      action: "close"
+      params: {"ips": ["127.0.0.1"]}

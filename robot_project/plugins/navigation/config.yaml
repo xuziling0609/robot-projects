@@ -1,0 +1,14 @@
+plugin_type: "NavPlugin"
+enabled: true
+capabilities:
+  - "navigation"
+
+params:
+  ip: "127.0.0.1"
+  port: 17808
+  app_code: "b2d4dc003e14974e99b03036d4815e0b"
+  robot_type: 514   # 513 (0x201) = 宇树 Go2 (亦支持 257=Lite3, 258=X30, 514=B2, 1025=Tron1)
+  timeout: 5.0
+  push_port: 17809
+  status_push_url: "http://127.0.0.1:17809/robot/status"
+  status_push_cycle: 5

@@ -1,0 +1,42 @@
+# ===================================================
+# 工业边缘网关 - 任务指令与系统告警规则配置文件
+# 支持文件修改时间 (mtime) 自动感知与动态热重载
+# ===================================================
+
+global_settings:
+  enabled: true
+  report_channel: "mqtt"            # mqtt | log | disk
+  default_suppress_seconds: 3       # 默认防抖抑制窗口 (秒)
+
+task_alarms:
+  # 1. 子任务失败告警
+  subtask_failed:
+    enabled: true
+    level: "error"                  # fatal | error | warning | info
+    code: 5001
+    suppress_seconds: 0             # 失败立即上报
+    message_template: "任务[{task_id}]步骤{step}(插件:{plugin_type})执行失败: {reason}。总任务已自动挂起(PAUSED)，等待平台下发[重试/终止/返航]指令。"
+
+  # 2. 任务暂停告警
+  task_paused:
+    enabled: true
+    level: "warning"
+    code: 5002
+    suppress_seconds: 3
+    message_template: "任务[{task_id}]已处于暂停挂起状态。原因: {reason}"
+
+  # 3. 任务恢复/重试告警
+  task_resumed:
+    enabled: true
+    level: "info"
+    code: 5003
+    suppress_seconds: 3
+    message_template: "任务[{task_id}]收到恢复/重试指令，重新恢复运行步骤{step}。"
+
+  # 4. 任务取消/终止告警
+  task_cancelled:
+    enabled: true
+    level: "warning"
+    code: 5004
+    suppress_seconds: 0
+    message_template: "任务[{task_id}]已被平台强行终止/取消。终止原因: {reason}"

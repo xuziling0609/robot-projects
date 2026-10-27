@@ -1,0 +1,30 @@
+plugin_type: "ElevatorPlugin"
+enabled: true
+capabilities:
+  - "elevator_control"
+
+# 插件专属业务参数
+params:
+  # ==========================================
+  # 1. 云迹开放平台 (云端呼梯) 专属配置
+  # ==========================================
+  host_api: "https://openapi.yunjichina.com.cn"        # API 根地址
+  appname: "fulang_d48abh"                             # 应用标识
+  secret: "CHANGE_ME"           # 签名秘钥
+  fixed_place_id: "ac0d324447d84dbb9ed5f31e5848677d"   # 绑定位置 ID
+  
+  # 云端资产映射表 (电梯编号映射设备 UUID 与 Secret)
+  assets:
+    18191: 
+      deviceUuid: "050041000232304A50394653"           # UUID
+      deviceSecret: "CHANGE_ME" # Secret
+    18198: 
+      deviceUuid: "2F0041000232304A50394653"           # UUID
+      deviceSecret: "CHANGE_ME" # Secret
+
+  # ==========================================
+  # 2. 本地 LoRa 透传控制器 (局域网呼梯) 配置
+  # ==========================================
+  local_ip: "127.0.0.1"                          # 梯控局域网 IP
+  local_port: 10023                                    # 梯控端口
+  timeout: 3.0                                         # TCP 连接与通信超时时间 (秒)

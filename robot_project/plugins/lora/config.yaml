@@ -1,0 +1,8 @@
+plugin_type: "LoraPlugin"
+enabled: true
+
+params:
+  host: "127.0.0.1"
+  port: 10024
+  robot_id: "P2026083101"
+  delay_seconds: 5.0

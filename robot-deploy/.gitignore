@@ -1,0 +1,7 @@
+docker-image/*
+docker/*
+!docker/*.sh
+!docker-image/*.sh
+ssl/cert/*
+!ssl/cert/.gitkeep
+app-init/nginx/cert/*

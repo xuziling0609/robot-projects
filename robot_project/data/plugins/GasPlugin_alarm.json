@@ -1,0 +1,247 @@
+[
+  {
+    "metric_name": "CO2",
+    "unit": "PPM",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          400,
+          700
+        ],
+        "message": "CO2二氧化碳浓度轻度偏高提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          700,
+          1000
+        ],
+        "message": "CO2二氧化碳浓度偏高预警，请注意开窗通风"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          1000,
+          2000
+        ],
+        "message": "CO2二氧化碳浓度超标，可能引发头晕与胸闷"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 2000,
+        "message": "CO2二氧化碳严重超标，存在缺氧窒息危险！"
+      }
+    }
+  },
+  {
+    "metric_name": "CO",
+    "unit": "PPM",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          5,
+          24
+        ],
+        "message": "CO一氧化碳微量检测提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          24,
+          50
+        ],
+        "message": "CO一氧化碳浓度偏高预警"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          50,
+          100
+        ],
+        "message": "CO一氧化碳浓度超标，存在中毒隐患！"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 100,
+        "message": "CO一氧化碳极度超标，致命危险！"
+      }
+    }
+  },
+  {
+    "metric_name": "H2S",
+    "unit": "PPM",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          1,
+          5
+        ],
+        "message": "H2S硫化氢微量检测提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          5,
+          10
+        ],
+        "message": "H2S硫化氢浓度偏高预警"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          10,
+          50
+        ],
+        "message": "H2S硫化氢浓度超标，剧毒隐患！"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 50,
+        "message": "H2S硫化氢严重超标，剧毒致命！"
+      }
+    }
+  },
+  {
+    "metric_name": "O2",
+    "unit": "%VOL",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          19.0,
+          20.5
+        ],
+        "message": "O2氧气浓度轻微偏低提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          18.0,
+          19.0
+        ],
+        "message": "O2氧气浓度偏低预警"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          16.0,
+          18.0
+        ],
+        "message": "O2氧气浓度严重不足，缺氧警告！"
+      },
+      "fatal": {
+        "operator": "lt",
+        "value": 16.0,
+        "message": "O2氧气极度匮乏，存在窒息危险！"
+      }
+    }
+  },
+  {
+    "metric_name": "EX",
+    "unit": "%LEL",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          3,
+          10
+        ],
+        "message": "EX可燃气体微量泄漏提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          10,
+          25
+        ],
+        "message": "EX可燃气体泄漏预警"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          25,
+          50
+        ],
+        "message": "EX可燃气体严重泄漏，爆炸隐患！"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 50,
+        "message": "EX可燃气体达到爆炸下限风险，极其危险！"
+      }
+    }
+  },
+  {
+    "metric_name": "SF6",
+    "unit": "PPM",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          100,
+          500
+        ],
+        "message": "SF6六氟化硫微量泄露提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          500,
+          1000
+        ],
+        "message": "SF6六氟化硫泄露偏高预警"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          1000,
+          1500
+        ],
+        "message": "SF6六氟化硫泄露超标警报！"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 1500,
+        "message": "SF6六氟化硫严重泄露，强窒息危险！"
+      }
+    }
+  },
+  {
+    "metric_name": "NOX",
+    "unit": "PPM",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          1,
+          5
+        ],
+        "message": "NOX氮氧化物微量检测提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          5,
+          20
+        ],
+        "message": "NOX氮氧化物浓度偏高预警"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          20,
+          50
+        ],
+        "message": "NOX氮氧化物浓度超标警报！"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 50,
+        "message": "NOX氮氧化物极高浓度，强毒性致命危险！"
+      }
+    }
+  }
+]

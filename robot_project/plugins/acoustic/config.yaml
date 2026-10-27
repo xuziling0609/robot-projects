@@ -1,0 +1,8 @@
+# 参照 Gas 插件设计规范
+plugin_type: "AcousticPlugin"
+enabled: true
+
+params:
+  ip: "192.168.123.102"
+  http_port: 80
+  tcp_port: 13052

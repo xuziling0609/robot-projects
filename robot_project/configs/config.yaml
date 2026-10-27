@@ -1,0 +1,20 @@
+# ==================================
+# 边缘网关环境配置文件
+# ==================================
+
+gateway:
+  version: "0.1.0"
+  location: "xian_lab" # 场站标识
+  auto_rth_timeout_sec: 300 # 任务暂停超时自动返航时间(秒)
+  max_rth_deviation_m: 5.0 # 任务启动时距离起点的最大允许偏差(米)
+
+mqtt:
+  broker_ip: "192.168.3.36"
+  port: 1883
+  robot_id: "P2026083101"
+  client_id: "P2026083101"
+  username: "robot"
+  password: "CHANGE_ME"
+  heartbeat_interval: 5.0
+
+log_level: "DEBUG"

@@ -1,0 +1,48 @@
+[
+  {
+    "metric_name": "BATTERY",
+    "unit": "%",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [
+          20.0,
+          30.0
+        ],
+        "message": "机器人电量偏低提示 (当前电量低于 30%)"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "message": "机器人低电量预警 (低于 20%)，打断任务强行回充！"
+      },
+      "error": {
+        "operator": "between",
+        "value": [
+          5.0,
+          10.0
+        ],
+        "message": "机器人严重低电量警报 (低于 10%)，打断任务强行回充！"
+      },
+      "fatal": {
+        "operator": "lt",
+        "value": 5.0,
+        "message": "机器人电量极度匮乏 (低于 5%)，即将关闭系统保护电池！"
+      }
+    }
+  },
+  {
+    "metric_name": "BLOCKED",
+    "unit": "bool",
+    "thresholds": {
+      "warning": {
+        "operator": "eq",
+        "value": 1,
+        "message": "机器人底盘受阻/行进路线检测到障碍物阻挡"
+      }
+    }
+  }
+]

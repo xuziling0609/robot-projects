@@ -1,0 +1,8 @@
+# 开门机配置
+plugin_type: "DoorPlugin"           # 插件的主类名
+enabled: true                       # 是否启用该插件
+capabilities:
+  - "door_control"
+params:
+  port: 10021                       # FMK02 默认端口
+timeout: 3.0                        # Socket 连接与通信超时时间

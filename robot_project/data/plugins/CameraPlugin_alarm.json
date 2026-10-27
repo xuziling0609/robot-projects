@@ -1,0 +1,28 @@
+[
+  {
+    "metric_name": "THERMAL",
+    "unit": "℃",
+    "thresholds": {
+      "info": {
+        "operator": "between",
+        "value": [10.0, 70.0],
+        "message": "温度轻微偏高提示"
+      },
+      "warning": {
+        "operator": "between",
+        "value": [70.0, 90.0],
+        "message": "温度偏高预警，请注意巡检"
+      },
+      "error": {
+        "operator": "between",
+        "value": [90.0, 110.0],
+        "message": "温度超高告警，存在过热损坏危险！"
+      },
+      "fatal": {
+        "operator": "gte",
+        "value": 110.0,
+        "message": "温度极度异常，存在火灾起火隐患！"
+      }
+    }
+  }
+]

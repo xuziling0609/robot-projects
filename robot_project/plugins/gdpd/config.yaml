@@ -1,0 +1,14 @@
+# GDPD 局部放电检测插件配置
+plugin_type: "GdpdPlugin"
+enabled: true
+
+params:
+  conn_type: "serial"           # 通信连接模式: "serial" (485串口) 或 "tcp" (以太网网关)
+  port: "/dev/sensors/partial_discharge"          # RS485 串口设备路径 (例如 "/dev/ttyUSB0", "/dev/ttyS1" 或 TCP端口如 5030)
+  baudrate: 9600                # 波特率 (默认 9600)
+  data_bits: 8                  # 数据位
+  stop_bits: 1                  # 停止位
+  parity: "N"                   # 校验位: 'N'-无校验, 'E'-偶校验, 'O'-奇校验
+  timeout: 2.0                  # 串口读写超时时间 (秒)
+  sample_count: 10              # 启动后连续采集次数 (默认 10 次)
+  sample_interval: 1.0          # 启动后连续采集时间间隔 (默认 1.0 秒)

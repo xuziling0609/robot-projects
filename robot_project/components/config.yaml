@@ -1,0 +1,8 @@
+# ==================================
+# 业务宏组件 (Macro-Components) 启停配置
+# ==================================
+
+components:
+  DoorComponent: false       # 自动门穿行组件
+  ElevatorComponent: false   # 电梯梯控组件
+  StationComponent: false    # 充电桩对桩组件

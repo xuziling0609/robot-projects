@@ -1,0 +1,31 @@
+# 录像与视频归档插件配置 (RecordPlugin)
+plugin_type: "RecordPlugin"
+enabled: true
+
+params:
+  # 录像引擎配置
+  recording:
+    segment_duration_sec: 60    # 滚动切片时长 (秒)
+    save_dir: "data/videos"     # 本地临时写入缓存目录
+
+    # 视频通道配置：键为通道别名 (如 vis, thm, arm, rear 等)，包含展示名称 (label) 与 RTSP 码流地址 (url)
+    channels:
+      vis:
+        label: "可见光通道"
+        url: "rtsp://admin:zonann2025@192.168.3.86:554/cam/realmonitor?channel=1&subtype=0"
+      thm:
+        label: "热成像通道"
+        url: "rtsp://admin:zonann2025@192.168.3.86:554/cam/realmonitor?channel=1&subtype=0"
+
+  # 服务端 SeaweedFS 自动同步配置
+  server_sync:
+    enabled: true
+    storage_type: "seaweedfs"
+    delete_after_sync: true     # 上云即焚：确认入库后立即删除本地文件、录制日志与 task_id 目录
+    seaweedfs:
+      filer_url: "http://192.168.3.36:8888" # SeaweedFS Filer HTTP 服务入口
+      base_dir: "robot_surveillance"     # 服务端存储基础目录
+      timeout_sec: 15.0
+      retry_limit: 3
+    quota_management:
+      emergency_watermark_percent: 90.0  # 90% 紧急水位告警与保护阈值

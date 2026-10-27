@@ -1,0 +1,8 @@
+plugin_type: "ArmPlugin"
+enabled: true
+params:
+  ip: "127.0.0.1"
+  port: 10020
+  connect_timeout: 5.0
+  start_timeout: 5.0
+  exec_timeout: 60.0

@@ -1,0 +1,15 @@
+*.py[codz]
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.pdm-python
+.venv/
+data/*.db*
+data/*.db-shm
+data/*.db-wal
+logs/
+.agents/
+data/videos/
+data/tasks/
+

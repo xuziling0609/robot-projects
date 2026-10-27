@@ -1,0 +1,22 @@
+# 摄像头设备插件配置 (针对海康威视 HM-TD5567T-7_W 双光热成像测温云台相机 ISAPI 开发)
+plugin_type: "CameraPlugin"
+enabled: true
+
+params:
+  # 摄像头设备列表：严格对应现场唯一的双光云台相机 (HM-TD5567T-7_W)
+  # 双光云台相机支持双光谱通道：
+  # - 通道 1 (或 101): 可见光通道 (Visible Light) -> 支持视频流、PTZ云台控制与可见光抓图
+  # - 通道 2 (或 201): 热成像通道 (Thermal Imaging) -> 支持工业测温、规则告警与热成像红外抓图
+  cameras:
+    - camera_id: 1
+      name: "HM-TD5567T-7_W双光测温云台相机"
+      model: "HM-TD5567T-7_W"   # 明确设备型号：海康威视双光热成像测温云台相机
+      ip: "192.168.123.64"        # 摄像头 IP 地址
+      port: 80                  # HTTP 端口
+      protocol: "http"          # 通讯协议: http 或 https
+      username: "admin"         # 登录用户名 (用于 HTTP Digest 摘要认证)
+      password: "CHANGE_ME"     # 登录密码
+      timeout: 5.0              # 请求超时时长 (秒)
+      channel: 1                # 默认操作通道号 (1:可见光主通道, 2:热成像主通道)
+      ptz_enabled: true         # 开启云台 PTZ 控制能力
+      thermal_enabled: true     # 开启工业测温/热成像能力

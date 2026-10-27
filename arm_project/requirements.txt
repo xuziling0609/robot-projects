@@ -1,0 +1,26 @@
+# RM65-6F 机械臂三维视觉追踪避障系统 - 核心生产环境依赖 (Python 3.8 兼容)
+
+# 基础工具与日志
+pyyaml>=6.0.1
+ruamel.yaml>=0.17.0
+loguru>=0.7.2
+typing-extensions>=4.5.0
+
+# 科学计算与数学库 (强制限定 NumPy 1.x 与 SciPy 1.10.x 保证 Python 3.8 兼容)
+numpy>=1.22.0,<=1.24.4
+scipy>=1.9.0,<=1.10.1
+
+# 计算机视觉库
+opencv-python>=4.6.0,<4.10.0
+
+# YOLO 目标检测 (8.3.60+ 放弃了 Python 3.8，锁在 8.2 系列)
+ultralytics>=8.0.0,<=8.2.103
+
+# 深度学习底座 (Python 3.8 兼容区间)
+# 提示: 针对嵌入式/CUDA环境，请根据具体硬件平台安装对应的硬件加速轮子或参考部署文档
+torch>=2.0.0,<2.2.0
+torchvision>=0.15.0,<0.17.0
+
+# 机械臂 SDK (conda robot 虚拟环境中已预装)
+Robotic-Arm==1.0.6
+

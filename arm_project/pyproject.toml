@@ -1,0 +1,10 @@
+[project]
+name = "arm_project"
+version = "0.1.0"
+description = "睿尔曼 RM65-6F 机械臂三维视觉追踪避障控制系统"
+authors = [
+    {name = "ylweb", email = "ylweb@qq.com"},
+]
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}

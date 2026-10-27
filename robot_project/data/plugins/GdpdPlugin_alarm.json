@@ -1,0 +1,18 @@
+[
+  {
+    "metric_name": "PEAK",
+    "unit": "dBm",
+    "thresholds": {
+      "warning": {
+        "operator": "gte",
+        "value": 20.0,
+        "message": "局放峰值异常偏高预警"
+      },
+      "error": {
+        "operator": "gte",
+        "value": 35.0,
+        "message": "局放峰值严重超标，疑似存在严重局部放电隐患！"
+      }
+    }
+  }
+]

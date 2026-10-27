@@ -1,0 +1,8 @@
+plugin_type: "StationPlugin"
+enabled: true
+capabilities:
+  - "station_control"
+params:
+  port: 10022             # DO 模块通信端口
+  timeout: 3.0            # Socket 连接与通信超时时间
+  uptime_success: 5.0    # 开门成功后的休眠维持时间

@@ -1,0 +1,292 @@
+robot:
+  # 名称
+  name: robot
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2025
+  # 文件路径 示例（ Windows配置D:/robot/uploadPath，Linux配置 /home/robot/uploadPath）
+  profile: /home/robot/uploadPath
+  # 地图文件临时保存路径 示例（ Windows配置D:/robot/map，Linux配置 /home/robot/map）
+  mapFile: /home/robot/map
+  # 获取ip地址开关
+  addressEnabled: false
+  # 验证码类型 math 数字计算 char 字符验证
+  captchaType: math
+
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8080
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # 连接数满后的排队数，默认为100
+    accept-count: 1000
+    threads:
+      # tomcat最大线程数，默认为200
+      max: 800
+      # Tomcat启动初始化的线程数，默认值10
+      min-spare: 100
+
+# 日志配置
+logging:
+  level:
+    com.robot: info
+    org.springframework: warn
+
+# 用户配置
+user:
+  password:
+    # 密码最大错误次数
+    maxRetryCount: 5
+    # 密码锁定时间（默认10分钟）
+    lockTime: 10
+
+# Spring配置
+spring:
+  # ════════════════════════════════════════════════════════════
+  # 环境与数据库切换配置
+  # 格式：spring.profiles.active=环境,数据库类型
+  #   环境可选值：dev(开发) | test(测试) | prod(生产) | prodmd(生产MD) | prodqingdao(青岛)
+  #   数据库可选值：mysql(默认) | opengauss
+  #
+  # 切换方式：
+  #   开发/测试阶段：修改下方 active 配置
+  #   生产部署：使用启动参数 --spring.profiles.active=prod,opengauss
+  #   容器化部署：使用环境变量 SPRING_PROFILES_ACTIVE=prod,opengauss
+  # ════════════════════════════════════════════════════════════
+  profiles:
+#    active: opengauss
+#    active: opengauss
+#    active: dev,mysql
+#    active: dev,opengauss
+  # active: test,mysql
+  # active: test,opengauss
+  # active: prod,mysql
+  # active: prod,opengauss
+  # active: prodmd,mysql
+  # active: prodmd,opengauss
+  # active: prodqingdao,mysql
+  # active: prodqingdao,opengauss
+  # 文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      file-size-threshold: 2KB
+      location: ${robot.profile}/temp
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  # redis 配置
+  redis:
+    host: app-redis
+    port: 6379
+    database: 0
+    password: CHANGE_ME
+    timeout: 10s
+    lettuce:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
+        max-wait: -1ms
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置连接超时时间
+      connectTimeout: 30000
+      # 配置网络超时时间
+      socketTimeout: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username: ruoyi
+        login-password: CHANGE_ME
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: CHANGE_ME
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+
+# MyBatis配置
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.robot.**.domain
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+  configLocation: classpath:mybatis/mybatis-config.xml
+
+# PageHelper分页插件
+pagehelper:
+  supportMethodsArguments: true
+  params: count=countSql
+
+# Swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: true
+  # 请求前缀
+  pathMapping: /dev-api
+
+# 防止XSS攻击
+xss:
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /system/notice
+  # 匹配链接
+  urlPatterns: /system/*,/monitor/*,/tool/*
+
+# MQTT配置
+mqtt:
+  # 服务器地址
+  broker: tcp://app-emqx:1883
+  # 客户端ID前缀（后缀自动追加8位随机码，避免多实例冲突）
+  clientId: robot-plat
+  # 用户名
+  username: robot
+  # 密码
+  password: CHANGE_ME
+  cleanSession: true
+  # 连接超时(秒)
+  connectionTimeout: 10
+  # 心跳间隔(秒)，建议20-30，过高会导致假死发现延迟，过低增加网络开销
+  keepAliveInterval: 20
+  # 自动重连(Paho内置)
+  automaticReconnect: true
+  # 最大未确认发送消息数，超过此值publish会阻塞
+  maxInflight: 100
+  # 消息服务质量
+  qos: 1
+  # 消费者线程数（异步处理上行消息的线程池大小）
+  consumerThreads: 4
+  # 内存队列容量（超出时告警并丢弃最旧消息）
+  queueCapacity: 10000
+  # 队列消费异常重试次数
+  consumerRetryTimes: 3
+  topics:
+    # 上行主题（设备 -> 平台），平台侧建议按通配符统一订阅
+    up:
+      capability: /edge/gateway/+/capability/up
+      response: /edge/gateway/+/response/up
+      alarm: /edge/gateway/+/alarm/up
+      status: /edge/gateway/+/status/up
+    # 下行主题（平台 -> 设备），{deviceSn} 为设备序列号占位符
+    down:
+      cmd: /edge/gateway/{deviceSn}/cmd/down
+
+# ai盒子
+ai:
+  getAlertVideoInfo: http://192.168.2.101:9092/ks/alert/by_id
+  getAlertVideoUrl: http://192.168.2.101:9092/staticdata
+
+# LoRa网关配置
+lora:
+  switchlo: true
+  gateway:
+    host: 192.168.3.3
+    port: 8888
+    pong-timeout: 100000
+  connect:
+    timeout: 5000
+  read:
+    timeout: 30000
+  heartbeat:
+    interval: 30000
+  reconnect:
+    interval: 2000
+    max-attempts: -1
+    max-interval: 60000
+  auto-connect: true
+  buffer-size: 4096
+# 电池电量
+ys:
+  battery:
+    power: 20
+
+# ════════════════════════════════════════════════
+# 默认数据库配置（不带环境 Profile 切换时使用）
+# ════════════════════════════════════════════════
+---
+spring:
+  profiles: mysql
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      master:
+        url: jdbc:mysql://app-mysql:3306/robot?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: CHANGE_ME
+      validationQuery: SELECT 1 FROM DUAL
+
+pagehelper:
+  helperDialect: mysql
+
+---
+spring:
+  profiles: opengauss
+  config:
+    activate:
+      on-profile: opengauss
+  datasource:
+    driverClassName: org.postgresql.Driver
+    druid:
+      master:
+        url: jdbc:postgresql://app-opengauss:5432/postgres?currentSchema=gaussdb&useUnicode=true&characterEncoding=utf8&useSSL=true
+        username: gaussdb
+        password: CHANGE_ME
+      validationQuery: SELECT 1
+
+pagehelper:
+  helperDialect: postgresql

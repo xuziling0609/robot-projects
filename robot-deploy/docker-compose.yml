@@ -1,0 +1,222 @@
+networks:
+  network-robot:
+    external: true
+
+services:
+  # ===================== openGauss =====================
+  opengauss:
+    profiles: ["opengauss"]
+    image: ${IMAGE_OPENGAUSS}
+    container_name: app-opengauss
+    restart: always
+    networks:
+      - network-robot
+    privileged: true
+    shm_size: 4gb
+    ulimits:
+      nofile:
+        soft: 1000000
+        hard: 1000000
+    environment:
+      GS_PASSWORD: ${OPENGAUSS_PASSWORD}
+      GS_USERNAME: ${OPENGAUSS_USERNAME}
+      TZ: Asia/Shanghai
+    volumes:
+      - ${DATA_DIR}/opengauss:/var/lib/opengauss
+    ports:
+      - "${PORT_OPENGAUSS}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '(echo > /dev/tcp/127.0.0.1/5432) 2>/dev/null' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  # ===================== MySQL =====================
+  mysql:
+    profiles: ["mysql"]
+    image: ${IMAGE_MYSQL}
+    container_name: app-mysql
+    restart: always
+    networks:
+      - network-robot
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-CHANGE_ME}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ${DATA_DIR}/mysql/data:/var/lib/mysql
+    ports:
+      - "${PORT_MYSQL}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_PASSWORD:-CHANGE_ME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ===================== Redis =====================
+  redis:
+    image: ${IMAGE_REDIS}
+    container_name: app-redis
+    restart: always
+    networks:
+      - network-robot
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ${DATA_DIR}/redis/data:/data
+    ports:
+      - "${PORT_REDIS}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6379", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ===================== EMQX =====================
+  emqx:
+    image: ${IMAGE_EMQX}
+    container_name: app-emqx
+    restart: always
+    networks:
+      - network-robot
+    # 1. 固定容器主机名，不要用自动生成
+    hostname: emqx-node-robot
+    environment:
+      EMQX_HOST: emqx-node-robot
+      # 2. 直接固定完整节点名
+      EMQX_NODE__NAME: emqx@emqx-node-robot
+      # 管理控制台默认账号密码
+      EMQX_DASHBOARD__LISTENERS__HTTP__BIND: "0.0.0.0:18083"
+      EMQX_DASHBOARD__LISTENERS__HTTP__ENABLE: true
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: "CHANGE_ME"
+    volumes:
+      - ${DATA_DIR}/emqx/data:/opt/emqx/data
+      - ${DATA_DIR}/emqx/logs:/opt/emqx/log
+      - ${DATA_DIR}/emqx/etc/emqx.conf:/opt/emqx/etc/emqx.conf
+    ports:
+      - "${PORT_EMQX_MQTT}:1883"
+      - "${PORT_EMQX_MQTTS}:8883"
+      - "${PORT_EMQX_WS}:8083"
+      - "${PORT_EMQX_WSS}:8084"
+      - "${PORT_EMQX_DASHBOARD}:18083"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:18083/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ===================== SeaweedFS =====================
+  seaweedfs:
+    image: ${IMAGE_SEAWEEDFS}
+    container_name: app-seaweedfs
+    restart: always
+    networks:
+      - network-robot
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        weed server -dir=/data -filer -s3 &
+        PID=$$!
+        (
+          until curl -sf http://localhost:8888/ >/dev/null 2>&1; do sleep 1; done
+          curl -s -X POST "http://localhost:8888/robot_surveillance/" >/dev/null 2>&1 || true
+        ) &
+        wait $$PID
+    volumes:
+      - ${DATA_DIR}/seaweedfs/data:/data
+    ports:
+      - "${PORT_SEAWEEDFS_MASTER}:9333"
+      - "${PORT_SEAWEEDFS_VOLUME}:8080"
+      - "${PORT_SEAWEEDFS_FILER}:8888"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9333/cluster/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ===================== go2rtc =====================
+  go2rtc:
+    image: ${IMAGE_GO2RTC}
+    container_name: app-go2rtc
+    restart: always
+    network_mode: host
+    volumes:
+      - ${DATA_DIR}/go2rtc/config:/config
+    ports:
+      - "${PORT_GO2RTC_API}:1984"
+      - "${PORT_GO2RTC_RTSP}:8554"
+      - "${PORT_GO2RTC_WEBRTC}:8555/tcp"
+      - "${PORT_GO2RTC_WEBRTC}:8555/udp"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1984/api/streams"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ===================== Java 后端 =====================
+  app-java:
+    build: ${DATA_DIR}/jars
+    image: ${IMAGE_APP_JAVA:-app-java:1.0.0}
+    container_name: app-java
+    restart: always
+    networks:
+      - network-robot
+    depends_on:
+      redis:
+        condition: service_healthy
+      emqx:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_CONFIG_USE_LEGACY_PROCESSING: "true"
+      SPRING_PROFILES_ACTIVE: cususer,${DB_TYPE}
+    volumes:
+      - ${DATA_DIR}/jars/logs:/home/robot/logs
+      - ${DATA_DIR}/jars/upload:/home/robot/uploadPath
+      - ${DATA_DIR}/jars/config:/home/robot/config
+      - /etc/machine-id:/etc/machine-id:ro
+    ports:
+      - "${PORT_JAVA}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '(echo > /dev/tcp/127.0.0.1/8080) 2>/dev/null' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ===================== Nginx =====================
+  nginx:
+    image: ${IMAGE_NGINX}
+    container_name: app-nginx
+    restart: always
+    networks:
+      - network-robot
+    depends_on:
+      - app-java
+    volumes:
+      - ${DATA_DIR}/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ${DATA_DIR}/nginx/conf:/etc/nginx/conf.d
+      - ${DATA_DIR}/nginx/logs:/var/log/nginx
+      - ${DATA_DIR}/nginx/dist:/usr/share/nginx/html
+      - ${DATA_DIR}/nginx/cert:/etc/nginx/cert
+    ports:
+      - "${PORT_NGINX_HTTP}:80"
+      - "${PORT_NGINX_HTTPS}:443"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s

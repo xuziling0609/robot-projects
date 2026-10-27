@@ -1,0 +1,5 @@
+# 开发与测试环境依赖 (Python 3.8 兼容)
+-r requirements.txt
+
+pytest>=7.4.0,<8.1.0
+pytest-mock>=3.12.0
